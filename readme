@@ -1,1 +1,18 @@
-sdrsdsd
+timer/
+├── pom.xml                    # Конфигурация Maven
+├── src/
+│   ├── main/
+│   │   ├── java/
+│   │   │   └── com/
+│   │   │       └── timeapp/
+│   │   │           ├── Main.java          # Главный класс
+│   │   │           ├── controllers/       # Контроллеры
+│   │   │           ├── models/            # Модели данных
+│   │   │           └── views/             # FXML файлы (опционально)
+│   │   └── resources/
+│   │       ├── styles/                    # CSS файлы
+│   │       │   └── main.css
+│   │       └── fxml/                      # FXML файлы
+│   │           └── main-view.fxml
+│   └── test/                             # Тесты (позже)
+└── README.md
