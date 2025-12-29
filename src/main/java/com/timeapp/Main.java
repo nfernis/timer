@@ -2,32 +2,36 @@ package com.timeapp;  // или com.timer если переименуете
 
 import javafx.application.Application;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.layout.StackPane;
+import javafx.scene.layout.FlowPane;
 import javafx.stage.Stage;
-import com.jfoenix.controls.JFXButton;
 
 public class Main extends Application {
 
-    @Override
-    public void start(Stage stage) throws Exception {
-        // Загрузка FXML интерфейса
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/main-view.fxml"));
-        Parent root = loader.load();
-
-        Scene scene = new Scene(root, 900, 700);
-
-        // Применение CSS стилей
-        scene.getStylesheets().add(getClass().getResource("/styles/main.css").toExternalForm());
-
-        stage.setTitle("Таймер Профессионал v2.0");
-        stage.setScene(scene);
-        stage.setMinWidth(800);
-        stage.setMinHeight(600);
-        stage.show();
+    public static void main(String[] args) {
+        Application.launch();
     }
 
-    public static void main(String[] args) {
-        launch(args);
+    @Override
+    public void start(Stage primaryStage) throws Exception {
+        primaryStage.setTitle("Таймер");
+        primaryStage.setWidth(500);
+        primaryStage.setHeight(400);
+
+        /* это добавление иконки, но ее еще нужно сделать
+        InputStream iconStream =
+                getClass().getResourceAsStream("/images/someImage.png");
+        Image image = new Image(iconStream);
+        primaryStage.getIcons().add(image);*/
+        Label comeToWork =  new Label("Пришла на работу: ");
+
+
+        FlowPane root = new FlowPane(comeToWork);
+        Scene scene = new Scene(root);
+
+        primaryStage.setScene(scene);
+        primaryStage.show();
     }
 }
