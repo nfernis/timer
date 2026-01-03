@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.Pane?>
+
+<Pane prefHeight="419.0" prefWidth="449.0" xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.timeapp.Controller">
+
+    <Label fx:id="comeToWork"
+           layoutX="75.0" layoutY="76.0" text="Пришла на работу:" />
+    <Label fx:id="goToLunch"
+           layoutX="75.0" layoutY="152.0" text="Ушла на обед:" />
+    <Label fx:id="comebackFromLunch"
+           layoutX="75.0" layoutY="228.0" text="Прийти с обеда:" />
+    <Label fx:id="quitMyJob"
+           layoutX="75.0" layoutY="304.0" text="Уйти с работы:" />
+
+    <TextField fx:id="timeComeToWork"
+               layoutX="213.0" layoutY="72.0" />
+    <TextField fx:id="timeGoToLunch"
+               layoutX="213.0" layoutY="148.0" />
+    <TextField fx:id="timeComebackFromLunch"
+               layoutX="213.0" layoutY="224.0" />
+    <TextField fx:id="timeQuitMyJob"
+               layoutX="213.0" layoutY="300.0" />
+
+</Pane>

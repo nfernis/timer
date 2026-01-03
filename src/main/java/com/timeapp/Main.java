@@ -1,12 +1,12 @@
-package com.timeapp;  // или com.timer если переименуете
+package com.timeapp;
 
 import javafx.application.Application;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.layout.FlowPane;
 import javafx.stage.Stage;
+
+import java.io.IOException;
 
 public class Main extends Application {
 
@@ -16,22 +16,22 @@ public class Main extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception {
-        primaryStage.setTitle("Таймер");
-        primaryStage.setWidth(500);
-        primaryStage.setHeight(400);
+        try {
+            Parent root = FXMLLoader.load(getClass().getResource("/fxml/main.fxml"));
+            Scene scene = new Scene(root, 600, 400);
+             /* это добавление иконки, но ее еще нужно сделать
+            InputStream iconStream =
+            getClass().getResourceAsStream("/images/someImage.png");
+            Image image = new Image(iconStream);
+            primaryStage.getIcons().add(image);*/
 
-        /* это добавление иконки, но ее еще нужно сделать
-        InputStream iconStream =
-                getClass().getResourceAsStream("/images/someImage.png");
-        Image image = new Image(iconStream);
-        primaryStage.getIcons().add(image);*/
-        Label comeToWork =  new Label("Пришла на работу: ");
+            primaryStage.setTitle("Таймер");
+            primaryStage.setScene(scene);
+            primaryStage.show();
 
-
-        FlowPane root = new FlowPane(comeToWork);
-        Scene scene = new Scene(root);
-
-        primaryStage.setScene(scene);
-        primaryStage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+            // Обработка ошибки загрузки FXML
+        }
     }
 }

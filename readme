@@ -6,13 +6,13 @@ timer/
 │   │   │   └── com/
 │   │   │       └── timeapp/
 │   │   │           ├── Main.java          # Главный класс
-│   │   │           ├── controllers/       # Контроллеры
-│   │   │           ├── models/            # Модели данных
-│   │   │           └── views/             # FXML файлы (опционально)
+│   │   │           ├── controllers.java       # Контроллер
+│   │   │           ├── models/            # Модели данных TODO
+│   │   │           └── views/             # FXML файлы (опционально) TODO
 │   │   └── resources/
 │   │       ├── styles/                    # CSS файлы
 │   │       │   └── main.css
 │   │       └── fxml/                      # FXML файлы
 │   │           └── main-view.fxml
-│   └── test/                             # Тесты (позже)
+│   └── test/                             # Тесты (позже) TODO
 └── README.md
