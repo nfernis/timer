@@ -1,9 +1,15 @@
 package com.timeapp;
 
+import javafx.application.Platform;
 import javafx.fxml.FXML;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TextFormatter;
+
+import java.sql.SQLOutput;
+import java.time.Duration;
+import java.time.LocalTime;
 
 public class Controller {
     @FXML
@@ -22,6 +28,8 @@ public class Controller {
     private TextField timeComebackFromLunch;
     @FXML
     private TextField  timeQuitMyJob;
+    @FXML
+    private Button calculate;
 
     @FXML
     private void initialize() {
@@ -70,4 +78,37 @@ public class Controller {
             }
         });
     }
+    @FXML
+    private void calculater(){
+
+        LocalTime arrival = parseTime(timeComeToWork.getText());
+        LocalTime lunchStart = parseTime(timeGoToLunch.getText());
+        //LocalTime lunchEnd = parseTime(timeComebackFromLunch.getText());
+        LocalTime quit = parseTime(timeQuitMyJob.getText());
+        timeComebackFromLunch.insertText(0,Duration.between(arrival,lunchStart).toString());
+
+    }
+
+    private LocalTime parseTime(String timeStr) {
+        if (timeStr == null || timeStr.trim().isEmpty()) {
+            return null;
+        }
+
+        try {
+            // Добавляем секунды если нужно
+            if (timeStr.length() == 4) { // "09:00" -> 5 символов
+                timeStr = "0" + timeStr; // "9:00" -> "09:00"
+            }
+
+            if (timeStr.length() == 5 && timeStr.contains(":")) {
+                return LocalTime.parse(timeStr);
+            }
+
+            return null;
+        } catch (Exception e) {
+            System.err.println("Ошибка парсинга времени: " + timeStr);
+            return null;
+        }
+    }
+
 }
