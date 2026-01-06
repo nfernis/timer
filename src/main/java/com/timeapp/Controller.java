@@ -1,15 +1,14 @@
 package com.timeapp;
 
+import javafx.animation.PauseTransition;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
-import javafx.scene.control.TextFormatter;
+import javafx.scene.control.*;
 
 import java.sql.SQLOutput;
 import java.time.Duration;
 import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 
 public class Controller {
     @FXML
@@ -29,7 +28,7 @@ public class Controller {
     @FXML
     private TextField  timeQuitMyJob;
     @FXML
-    private Button calculate;
+    private Button calculaterLunchEnd;
 
     @FXML
     private void initialize() {
@@ -83,14 +82,41 @@ public class Controller {
         });
     }
     @FXML
-    private void calculater(){
-
+    private void calculaterLunchEnd(){
         LocalTime arrival = parseTime(timeComeToWork.getText());
         LocalTime lunchStart = parseTime(timeGoToLunch.getText());
         LocalTime lunchEnd = parseTime(timeComebackFromLunch.getText());
         LocalTime quit = parseTime(timeQuitMyJob.getText());
-        //TODO timeComebackFromLunch.setText(Duration.between(arrival,lunchStart).toString());
+        if (arrival == null || lunchStart == null || quit == null) {
+            showInfo("Заполните поля");
+            return;
+        }else {
+            timeComebackFromLunch.setText(String.valueOf(quit.minusMinutes(
+                            480 - Duration.between(arrival, lunchStart).toMinutes()).
+                    format(DateTimeFormatter.ofPattern("HH:mm"))));
+        }
+    }
+    private void showInfo(String message) {
+        Tooltip tooltip = new Tooltip(message);
 
+        // Показываем tooltip
+        tooltip.show(
+                timeComebackFromLunch.getScene().getWindow(),
+                timeComebackFromLunch.localToScreen(timeComebackFromLunch.getBoundsInLocal()).getMinX(),
+                timeComebackFromLunch.localToScreen(timeComebackFromLunch.getBoundsInLocal()).getMaxY() + 5
+        );
+
+        // Скрываем через 2 секунды с помощью Thread
+        new Thread(() -> {
+            try {
+                Thread.sleep(2000); // 2000 миллисекунд = 2 секунды
+                javafx.application.Platform.runLater(() -> {
+                    tooltip.hide();
+                });
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }).start();
     }
 
     private LocalTime parseTime(String timeStr) {
