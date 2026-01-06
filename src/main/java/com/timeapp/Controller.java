@@ -1,9 +1,13 @@
 package com.timeapp;
 
+import javafx.animation.FadeTransition;
 import javafx.animation.PauseTransition;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
+
 
 import java.sql.SQLOutput;
 import java.time.Duration;
@@ -11,6 +15,10 @@ import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 
 public class Controller {
+    @FXML
+    private VBox infoBox;
+    @FXML private VBox mainContainer;
+
     @FXML
     private Label comeToWork;
     @FXML
@@ -29,6 +37,11 @@ public class Controller {
     private TextField  timeQuitMyJob;
     @FXML
     private Button calculaterLunchEnd;
+    @FXML
+    private void handleClose() {
+        Stage stage = (Stage) infoBox.getScene().getWindow();
+        stage.close();
+    }
 
     @FXML
     private void initialize() {
@@ -78,8 +91,8 @@ public class Controller {
         LocalTime lunchEnd = parseTime(timeComebackFromLunch.getText());
         LocalTime quit = parseTime(timeQuitMyJob.getText());
         if (arrival == null || lunchStart == null || quit == null) {
-            if (arrival == null){showInfo("Заполните поля", timeComeToWork);}
-            if (lunchStart == null){showInfo("Заполните поля", timeGoToLunch);}
+            if (arrival == null){showError(timeComeToWork,"Заполните поля");}
+            if (lunchStart == null){showError(timeGoToLunch, "Заполните поля");}
             if (quit == null){timeQuitMyJob.insertText(0,"16:00");}
             return;
         }else {
@@ -90,7 +103,7 @@ public class Controller {
         }
     }
 
-    private void showInfo(String message, TextField field) {
+   /* private void showInfo(String message, TextField field) {
         Tooltip tooltip = new Tooltip(message);
 
         // Показываем tooltip
@@ -105,6 +118,51 @@ public class Controller {
             try {
                 Thread.sleep(2000); // 2000 миллисекунд = 2 секунды
                 javafx.application.Platform.runLater(tooltip::hide);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }).start();
+    }*/
+   private void showError(TextField field, String message) {
+       Tooltip tooltip = new Tooltip(message);
+       tooltip.setStyle(
+               "-fx-background-color: #ef4444;" +
+                       "-fx-text-fill: white;" +
+                       "-fx-font-size: 13px;" +
+                       "-fx-background-radius: 6px;"
+       );
+
+       showTooltipWithAnimation(field, tooltip);
+       field.setStyle("-fx-border-color: #ef4444; -fx-border-width: 2px;");
+   }
+    /**
+     * Показ тултипа с анимацией
+     */
+    private void showTooltipWithAnimation(TextField field, Tooltip tooltip) {
+        if (field.getScene() == null || field.getScene().getWindow() == null) {
+            return;
+        }
+
+        // Рассчитываем позицию для тултипа
+        double x = field.localToScreen(field.getBoundsInLocal()).getMinX();
+        double y = field.localToScreen(field.getBoundsInLocal()).getMaxY() + 5;
+
+        // Показываем тултип сразу
+        tooltip.show(field.getScene().getWindow(), x, y);
+
+        // Используем java.time.Duration для задержки скрытия
+        java.time.Duration delayDuration = java.time.Duration.ofSeconds(2);
+
+        new Thread(() -> {
+            try {
+                long delayMillis = delayDuration.toMillis();
+                Thread.sleep(delayMillis);
+
+                javafx.application.Platform.runLater(() -> {
+                    // Просто скрываем без анимации (как в оригинале)
+                    tooltip.hide();
+                });
+
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }

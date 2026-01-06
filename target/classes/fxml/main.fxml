@@ -1,59 +1,113 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.TextField?>
-<?import javafx.scene.layout.Pane?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Font?>
 
-<Pane prefHeight="419.0" prefWidth="487.0"
-      styleClass="app-container"
+<VBox fx:id="infoBox" alignment="TOP_CENTER"
+      spacing="20"
+      styleClass="main-container"
       stylesheets="@/styles/main.css"
       xmlns="http://javafx.com/javafx"
       xmlns:fx="http://javafx.com/fxml/1"
       fx:controller="com.timeapp.Controller">
 
-    <!-- Поля ввода -->
-    <Label fx:id="comeToWork"
-           layoutX="75.0" layoutY="76.0"
-           text="Пришла на работу:"
-           styleClass="input-label"/>
+    <padding>
+        <Insets top="40" right="40" bottom="40" left="40"/>
+    </padding>
 
-    <TextField fx:id="timeComeToWork"
-               layoutX="213.0" layoutY="72.0"
-               styleClass="time-input"/>
+    <!-- Заголовок с кнопкой закрытия -->
+    <HBox spacing="10" alignment="CENTER" prefHeight="40">
+        <Label text="⌚ Time Calculator"
+               styleClass="title-label">
+            <font>
+                <Font name="Segoe UI Semibold" size="28"/>
+            </font>
+        </Label>
+        <Region HBox.hgrow="ALWAYS"/>
+        <Button onAction="#handleClose"
+                styleClass="close-button"
+                minWidth="30" minHeight="30">
+            <graphic>
+                <Label text="✕" style="-fx-text-fill: #94a3b8; -fx-font-size: 16px;"/>
+            </graphic>
+        </Button>
+    </HBox>
 
-    <Label fx:id="goToLunch"
-           layoutX="75.0" layoutY="152.0"
-           text="Ушла на обед:"
-           styleClass="input-label"/>
+    <!-- Основной контейнер с карточками -->
+    <GridPane hgap="20" vgap="15"
+              styleClass="input-grid">
+        <columnConstraints>
+            <ColumnConstraints halignment="RIGHT" prefWidth="150"/>
+            <ColumnConstraints prefWidth="200"/>
+        </columnConstraints>
 
-    <TextField fx:id="timeGoToLunch"
-               layoutX="213.0" layoutY="148.0"
-               styleClass="time-input"/>
+        <!-- Приход на работу -->
+        <Label text="Приход на работу"
+               styleClass="field-label"
+               GridPane.rowIndex="0" GridPane.columnIndex="0"/>
 
-    <Label fx:id="comebackFromLunch"
-           layoutX="75.0" layoutY="228.0"
-           text="Прийти с обеда:"
-           styleClass="input-label"/>
+        <HBox spacing="10" GridPane.rowIndex="0" GridPane.columnIndex="1">
+            <TextField fx:id="timeComeToWork"
+                       styleClass="modern-input"
+                       promptText="09:00"
+                       prefWidth="120"/>
+            <Label text="🕘" styleClass="icon-label"/>
+        </HBox>
 
-    <TextField fx:id="timeComebackFromLunch"
-               layoutX="213.0" layoutY="224.0"
-               styleClass="time-input"/>
+        <!-- Уход на обед -->
+        <Label text="Уход на обед"
+               styleClass="field-label"
+               GridPane.rowIndex="1" GridPane.columnIndex="0"/>
 
-    <Label fx:id="quitMyJob"
-           layoutX="75.0" layoutY="304.0"
-           text="Уйти с работы:"
-           styleClass="input-label"/>
+        <HBox spacing="10" GridPane.rowIndex="1" GridPane.columnIndex="1">
+            <TextField fx:id="timeGoToLunch"
+                       styleClass="modern-input"
+                       promptText="13:00"
+                       prefWidth="120"/>
+            <Label text="☕" styleClass="icon-label"/>
+        </HBox>
 
-    <TextField fx:id="timeQuitMyJob"
-               layoutX="213.0" layoutY="300.0"
-               styleClass="time-input"/>
+        <!-- Возвращение с обеда -->
+        <Label text="Вернуться с обеда"
+               styleClass="field-label"
+               GridPane.rowIndex="2" GridPane.columnIndex="0"/>
+
+        <HBox spacing="10" GridPane.rowIndex="2" GridPane.columnIndex="1">
+            <TextField fx:id="timeComebackFromLunch"
+                       styleClass="modern-input"
+                       promptText="14:00"
+                       prefWidth="120"/>
+            <Label text="↩" styleClass="icon-label"/>
+        </HBox>
+
+        <!-- Уход с работы -->
+        <Label text="Уход с работы"
+               styleClass="field-label"
+               GridPane.rowIndex="3" GridPane.columnIndex="0"/>
+
+        <HBox spacing="10" GridPane.rowIndex="3" GridPane.columnIndex="1">
+            <TextField fx:id="timeQuitMyJob"
+                       styleClass="modern-input"
+                       promptText="18:00"
+                       prefWidth="120"/>
+            <Label text="🚶" styleClass="icon-label"/>
+        </HBox>
+
+    </GridPane>
 
     <!-- Кнопка расчета -->
     <Button fx:id="calculaterLunchEnd"
-            layoutX="396.0" layoutY="224.0"
-            text="Рассчитать"
+            text="Рассчитать время обеда"
             onAction="#calculaterLunchEnd"
-            styleClass="jfx-button calculate-button"/>
+            styleClass="modern-button">
+        <padding>
+            <Insets top="12" right="30" bottom="12" left="30"/>
+        </padding>
+        <font>
+            <Font name="Segoe UI Semibold" size="14"/>
+        </font>
+    </Button>
 
-</Pane>
+</VBox>
