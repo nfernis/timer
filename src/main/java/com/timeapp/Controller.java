@@ -41,32 +41,22 @@ public class Controller {
     //Маска для ввода времени
     private void inputTime(TextField field) {
         field.setTextFormatter(new TextFormatter<>(change -> {
-            if (change.isContentChange()) {  // Ctrl+C, Ctrl+V, выделение и т.д.
+            if (change.isContentChange() || change.isDeleted()) {  // Ctrl+C, Ctrl+V, выделение и т.д.
                 return change;  // Разрешаем
             }
-            if (change.isDeleted()) return change;
             return change;
         }));
 
         field.textProperty().addListener((obs, oldValue, newValue) -> {
             if (newValue == null) return;
             //проверка на числа
-           if (!newValue.matches("[0-9:]*")) {
-                field.setText(oldValue);
-                return;
-            }
-            //проверка длины
-            if (newValue.length() > 5) {
-                field.setText(oldValue);
-                return;
-            }
-            //не больше 23 часов
-            if (oldValue.isEmpty() && Integer.parseInt(newValue.split(":")[0]) > 2 && !newValue.contains(":")){
-                field.setText(oldValue);
-                return;
-            }
-            //не больше 59 минут
-            if (oldValue.length() == 3 && Integer.parseInt(newValue.substring(newValue.length()-1)) > 5){
+           if (!newValue.matches("[0-9:]*") || //только числа и :
+                   newValue.length() > 5 || //длина меньше пяти
+                   (oldValue.isEmpty() && Integer.parseInt(newValue.split(":")[0]) > 2
+                           && !newValue.contains(":")) || // <23 часов
+                   (oldValue.length() == 3 && //меньше 60 минут
+                           Integer.parseInt(newValue.substring(newValue.length()-1)) > 5)
+           ) {
                 field.setText(oldValue);
                 return;
             }
@@ -88,31 +78,33 @@ public class Controller {
         LocalTime lunchEnd = parseTime(timeComebackFromLunch.getText());
         LocalTime quit = parseTime(timeQuitMyJob.getText());
         if (arrival == null || lunchStart == null || quit == null) {
-            showInfo("Заполните поля");
+            if (arrival == null){showInfo("Заполните поля", timeComeToWork);}
+            if (lunchStart == null){showInfo("Заполните поля", timeGoToLunch);}
+            if (quit == null){timeQuitMyJob.insertText(0,"16:00");}
             return;
         }else {
+            if (quit == null){quit = parseTime("16:00");}
             timeComebackFromLunch.setText(String.valueOf(quit.minusMinutes(
                             480 - Duration.between(arrival, lunchStart).toMinutes()).
                     format(DateTimeFormatter.ofPattern("HH:mm"))));
         }
     }
-    private void showInfo(String message) {
+
+    private void showInfo(String message, TextField field) {
         Tooltip tooltip = new Tooltip(message);
 
         // Показываем tooltip
         tooltip.show(
-                timeComebackFromLunch.getScene().getWindow(),
-                timeComebackFromLunch.localToScreen(timeComebackFromLunch.getBoundsInLocal()).getMinX(),
-                timeComebackFromLunch.localToScreen(timeComebackFromLunch.getBoundsInLocal()).getMaxY() + 5
+                field.getScene().getWindow(),
+                field.localToScreen(field.getBoundsInLocal()).getMinX(),
+                field.localToScreen(field.getBoundsInLocal()).getMaxY() + 5
         );
 
         // Скрываем через 2 секунды с помощью Thread
         new Thread(() -> {
             try {
                 Thread.sleep(2000); // 2000 миллисекунд = 2 секунды
-                javafx.application.Platform.runLater(() -> {
-                    tooltip.hide();
-                });
+                javafx.application.Platform.runLater(tooltip::hide);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
