@@ -99,7 +99,7 @@
 
     <!-- Кнопка расчета -->
     <Button fx:id="calculaterLunchEnd"
-            text="Рассчитать время обеда"
+            text="Рассчитать время"
             onAction="#calculaterLunchEnd"
             styleClass="modern-button">
         <padding>
