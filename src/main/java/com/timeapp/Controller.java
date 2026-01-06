@@ -42,6 +42,9 @@ public class Controller {
     //Маска для ввода времени
     private void inputTime(TextField field) {
         field.setTextFormatter(new TextFormatter<>(change -> {
+            if (change.isContentChange()) {  // Ctrl+C, Ctrl+V, выделение и т.д.
+                return change;  // Разрешаем
+            }
             if (change.isDeleted()) return change;
             return change;
         }));
@@ -49,7 +52,7 @@ public class Controller {
         field.textProperty().addListener((obs, oldValue, newValue) -> {
             if (newValue == null) return;
             //проверка на числа
-            if (!newValue.matches("^\\d{0,2}:?\\d{0,2}$")) {
+           if (!newValue.matches("[0-9:]*")) {
                 field.setText(oldValue);
                 return;
             }
@@ -59,7 +62,7 @@ public class Controller {
                 return;
             }
             //не больше 23 часов
-            if (oldValue.length() == 0 && Integer.parseInt(newValue) > 2){
+            if (oldValue.isEmpty() && Integer.parseInt(newValue.split(":")[0]) > 2 && !newValue.contains(":")){
                 field.setText(oldValue);
                 return;
             }
@@ -76,6 +79,7 @@ public class Controller {
                     field.positionCaret(3);
                 });
             }
+
         });
     }
     @FXML
@@ -83,9 +87,9 @@ public class Controller {
 
         LocalTime arrival = parseTime(timeComeToWork.getText());
         LocalTime lunchStart = parseTime(timeGoToLunch.getText());
-        //LocalTime lunchEnd = parseTime(timeComebackFromLunch.getText());
+        LocalTime lunchEnd = parseTime(timeComebackFromLunch.getText());
         LocalTime quit = parseTime(timeQuitMyJob.getText());
-        timeComebackFromLunch.insertText(0,Duration.between(arrival,lunchStart).toString());
+        //TODO timeComebackFromLunch.setText(Duration.between(arrival,lunchStart).toString());
 
     }
 
